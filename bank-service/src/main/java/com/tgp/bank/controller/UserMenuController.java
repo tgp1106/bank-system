@@ -87,7 +87,7 @@ public class UserMenuController {
             throw new TgpException(201, "存款失败");
         }
         LocalDateTime currentTime = LocalDateTime.now();
-        userService.recordTransaction( "deposit", depositDto.getMoney(),currentTime);
+        // userService.recordTransaction( "deposit", depositDto.getMoney(),currentTime);
         return Result.ok("存款成功");
     }
 

@@ -20,7 +20,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
         }
-        .content {
+        .content{
             width: 75%;
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
@@ -37,38 +37,52 @@
             height: 100%; /* 设置高度为100%以撑开整个父容器 */
             margin: 0 20px; /* 添加一些间距 */
         }
+        .center-div {
+            position: absolute;
+            top: 50%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+        }
+        .announcement {
+            background-color: rgba(255, 255, 255, 0.8);
+            width: 30%;
+            height: 100%;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
 <div style="display: flex;">
-    <div class="menu" style="width: 20%; background-color: rgba(255, 255, 255, 0.8); padding: 20px;">
-        <div class="button-group">
-            <h4>
-                <span style="display: flex; align-items: center;">余额：
-                    <span id="balanceValue" style="display: inline-block;"></span>
-                    <span id="eyeIcon" class="fas fa-eye" style="cursor: pointer;" onclick="toggleBalance()"></span>
-                    <span id="eyeSlashIcon" class="fas fa-eye-slash" style="cursor: pointer; display: none;" onclick="toggleBalance()"></span>
-                </span>
-            </h4>
-            <button class="btn btn-primary btn-block" onclick="loadPage('${pageContext.request.contextPath}/deposit')">存款</button>
-            <button class="btn btn-secondary btn-block" onclick="loadPage('${pageContext.request.contextPath}/withdraw')">取款</button>
-            <button class="btn btn-success btn-block" onclick="loadPage('${pageContext.request.contextPath}/transfer')">转账</button>
-            <button class="btn btn-warning btn-block" onclick="loadPage('${pageContext.request.contextPath}/modify')">修改用户信息</button>
+    <div class="announcement" >
+        <h2 style="text-align: center;">公告</h2>
+        <div>
+
         </div>
     </div>
-    <div class="separator"></div>
-    <div class="content" style="width: 80%; padding: 20px;">
-        <div id="pageContent1" style="background-color: rgba(255, 255, 255, 0.8);">
+    <div class="content" style="width: 70%; padding: 20px;">
+        <div id="pageContent1" >
             <h2 style="text-align: center;">银行账户管理系统</h2>
             <div style="position: absolute; top: 10px; right: 10px;">
                 <button class="btn btn-danger" style="font-size: 10px;" onclick="window.location.href='${pageContext.request.contextPath}/logout'">退出登录</button>
             </div>
         </div>
-        <div id="pageContent" style="background-color: rgba(255, 255, 255, 0.8);">
+        <div id="pageContent" style="text-align: center;">
             <!-- 初始页面内容 -->
-            <button class="btn btn-danger" style="font-size: 10px; position: absolute; top: 10px; right: 10px;" onclick="window.location.href='${pageContext.request.contextPath}/logout'">退出登录</button>
-            <h2>Welcome</h2>
-            <p>请选择菜单中的操作</p>
+            <div class="center-div" style="width: 20%; padding: 20px;">
+                <div class="button-group">
+                    <h4>
+                <span style="display: flex; align-items: center;">余额：
+                    <span id="balanceValue" style="display: inline-block;"></span>
+                    <span id="eyeIcon" class="fas fa-eye" style="cursor: pointer;" onclick="toggleBalance()"></span>
+                    <span id="eyeSlashIcon" class="fas fa-eye-slash" style="cursor: pointer; display: none;" onclick="toggleBalance()"></span>
+                </span>
+                    </h4>
+                    <button class="btn btn-primary btn-block" onclick="loadPage('${pageContext.request.contextPath}/deposit')">存款</button>
+                    <button class="btn btn-secondary btn-block" onclick="loadPage('${pageContext.request.contextPath}/withdraw')">取款</button>
+                    <button class="btn btn-success btn-block" onclick="loadPage('${pageContext.request.contextPath}/transfer')">转账</button>
+                    <button class="btn btn-warning btn-block" onclick="loadPage('${pageContext.request.contextPath}/modify')">修改用户信息</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -5,10 +5,10 @@
     <!-- 配置 Redis 连接工厂 -->
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
         <!-- 设置 Redis 主机地址 -->
-        <property name="hostName" value="127.0.0.1" />
+        <property name="hostName" value="120.77.45.55" />
         <!-- 设置 Redis 端口号 -->
         <property name="port" value="6379" />
-
+        <property name="password" value="360428"/>
     </bean>
 
     <!-- 配置 RedisTemplate -->
