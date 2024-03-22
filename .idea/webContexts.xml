@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/bank-service/src/main/webapp/Retrievepassword.jsp" value="file://$PROJECT_DIR$/bank-service/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/bank-service/src/main/webapp/WEB-INF/views/Test.html" value="file://$PROJECT_DIR$/bank-service/src/main/webapp/WEB-INF/views" />
       </map>
     </option>
   </component>
