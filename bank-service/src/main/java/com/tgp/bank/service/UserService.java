@@ -49,5 +49,7 @@ public interface UserService extends IService<User> {
 
     boolean updateUserMassage(String userName);
 
+    List<User> selectList();
+
 
 }

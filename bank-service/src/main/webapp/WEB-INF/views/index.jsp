@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%
-    User user = (User)pageContext.getSession().getAttribute("loginUser");
-    String url = user.getFileUrl();
+        User user = (User)pageContext.getSession().getAttribute("loginUser");
+        String url = user.getFileUrl();
     %>
     <title>用户主页</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -119,7 +119,7 @@
     <div class="profile-info">
         <img src="${pageContext.request.contextPath}/imageProxy?imageName=<%=url%>" alt="" style="width: 40px; height: 40px; border-radius: 50%;">
         <button class="btn btn-primary btn-outline-light ml-2" style="margin-left: 15px;width: 100px;" onclick="backIndex()">返回主页</button>
-        <button class="btn btn-danger btn-outline-light ml-2" style="margin-left: 15px;width: 100px;">退出登录</button>
+        <button class="btn btn-danger btn-outline-light ml-2" style="margin-left: 15px;width: 100px;" onclick="window.location.href='${pageContext.request.contextPath}/logout'">退出登录</button>
     </div>
 </nav>
 

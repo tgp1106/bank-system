@@ -24,8 +24,11 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("SELECT user_name FROM user")
     List<String> getAllUsernames();
-    @Update("UPDATE user SET is_deleted = 0 WHERE user_name = #{userName}")
 
+    @Select("SELECT * FROM user")
+    List<User> getAllUser();
+
+    @Update("UPDATE user SET is_deleted = 0 WHERE user_name = #{userName}")
     boolean unfreezeUser(@Param("userName") String userName);
 
 

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import utils.execption.TgpException;
-import utils.jwt.JwtHelper;
 import utils.result.Result;
 
 import javax.servlet.http.HttpSession;
@@ -51,9 +50,9 @@ public class UserMenuController {
 
     @GetMapping("/admin")
     public String admin(Model model) {
-        List<String> allUsernames = userService.getAllUsernames();
-        model.addAttribute("usernames", allUsernames);
-        return "/admin-show";
+        List<User> users = userService.selectList();
+        model.addAttribute("users", users);
+        return "admin-show";
     }
 
     @GetMapping("/userFreeze")
