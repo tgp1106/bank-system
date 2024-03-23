@@ -20,7 +20,11 @@ public enum ResultCodeEnum {
 
     LOGIN_AUTH(208, "未登陆"),
     PERMISSION(209, "没有权限"),
-    PASSWORD_ERROR(404,"密码错误");
+    PASSWORD_ERROR(404,"密码错误"),
+
+    USERS_NOT_EXISTS(30001,"用户不存在"),
+    UPLOAD_ERROR(20001, "文件上传失败"),
+    LOAD_ERROR(20002, "文件加载失败");
 
     private Integer code;
 

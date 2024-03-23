@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-
 /**
  * @Author：陶广鹏
  * @Package：com.tgp.bank.filter
@@ -80,32 +79,32 @@ public class TokenFilter implements Filter {
         // 获取请求中的 token
         String token = (String) request.getSession().getAttribute("token");
         // 检查 token 是否有效，这里可以根据实际业务逻辑来判断
-        if (token == null||isTokenExpired(token)) {
+        if (token == null || isTokenExpired(token)) {
             // 无效的 token，进行跳转到登录页面
             request.getSession().invalidate();
             redisTemplate.delete("isLoggedIn");
             redisTemplate.delete("loginUsername");
             response.sendRedirect("/login.jsp?message=expired"); // 使用重定向方式跳转
-        } else if (request.getSession().getAttribute("loginUser")!=null) {
-                User loginUser = (User) request.getSession().getAttribute("loginUser");
+        } else if (request.getSession().getAttribute("loginUser") != null) {
+            User loginUser = (User) request.getSession().getAttribute("loginUser");
             String loginUsername = (String) redisTemplate.opsForValue().get("loginUsername");
 //            String passwordByusername = userService.getPasswordByusername(loginUser.getUserName());
             System.out.println(loginUsername);
             String passwordByusername = userService.getPasswordByusername(loginUsername);
-                if (!loginUser.getPassWord().equals(passwordByusername) ) {
-                    request.getSession().invalidate();
-                    redisTemplate.delete("isLoggedIn");
-                    redisTemplate.delete("loginUsername");
-                    response.sendRedirect("/login.jsp");//如果用户密码发生变动,清空session并跳转到登录页面
-                   return;
-                }
-                filterChain.doFilter(request, response);
-            }else if (request.getSession().getAttribute("loginAdministrator")!=null){
+            if (!loginUser.getPassWord().equals(passwordByusername)) {
+                request.getSession().invalidate();
+                redisTemplate.delete("isLoggedIn");
+                redisTemplate.delete("loginUsername");
+                response.sendRedirect("/login.jsp");//如果用户密码发生变动,清空session并跳转到登录页面
+                return;
+            }
+            filterChain.doFilter(request, response);
+        } else if (request.getSession().getAttribute("loginAdministrator") != null) {
             filterChain.doFilter(request, response);
         }
 
-        }
-        // 请求处理完成后，清除 ThreadLocal 中的用户和 token 信息
+    }
+    // 请求处理完成后，清除 ThreadLocal 中的用户和 token 信息
 
 
     @Override
@@ -151,7 +150,7 @@ public class TokenFilter implements Filter {
         if ("/administer.jsp".equals(requestUri)) {
             return true;
         }
-            return false;
+        return false;
 
     }
 
@@ -172,4 +171,4 @@ public class TokenFilter implements Filter {
             return true;
         }
     }
-    }
+}

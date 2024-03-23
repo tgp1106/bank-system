@@ -1,12 +1,14 @@
 package com.tgp.bank.service.impl;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tgp.bank.mapper.UserMapper;
 import com.tgp.bank.service.UserService;
 import dto.FindBackDto;
+import dto.ModifyDto;
 import entity.Transaction;
 import entity.User;
 import dto.DepositDto;
@@ -156,16 +158,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean modifyUserMassage(String phonenumber, String password, String username, HttpSession session) {
-        if (!phonenumber.matches("\\d+")){
+    public boolean modifyUserMassage(ModifyDto modifyDto, HttpSession session) {
+        if (!modifyDto.getPhone().matches("\\d+")){
         throw new TgpException(ResultCodeEnum.FAIL.getCode(),"手机号必须为纯数字！");
         }
-        User user = getByUserName(username);
-        user.setPassWord(MD5.encrypt(password));
-        user.setPhoneNumber(phonenumber);
+        User user = getByUserName(modifyDto.getUserName());
+        if (ObjectUtil.isEmpty(user)) {
+            throw new TgpException(ResultCodeEnum.USERS_NOT_EXISTS);
+        }
+        user.setPassWord(MD5.encrypt(modifyDto.getPassWord()));
+        user.setPhoneNumber(modifyDto.getPhone());
+        user.setFileUrl(modifyDto.getFileUrl());
 
-
-        return this.saveOrUpdate(user);
+        return saveOrUpdate(user);
     }
 
     @Override

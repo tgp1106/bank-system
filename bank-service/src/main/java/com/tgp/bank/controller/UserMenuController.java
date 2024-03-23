@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import utils.execption.TgpException;
+import utils.jwt.JwtHelper;
 import utils.result.Result;
 
 import javax.servlet.http.HttpSession;
@@ -120,10 +121,13 @@ public class UserMenuController {
     @ResponseBody
     @PostMapping("/modify")
     public Result modify(@RequestBody ModifyDto modifyDto, HttpSession session) {
-        boolean b = userService.modifyUserMassage(modifyDto.getPhone(), modifyDto.getPassWord(), modifyDto.getUserName(),session);
+        boolean b = userService.modifyUserMassage(modifyDto,session);
         if (!b) {
             throw new TgpException(201, "修改失败");
         }
+        // 更新用户的信息
+        User user = userService.getByUserName(modifyDto.getUserName());
+        session.setAttribute("loginUser", user);
         return Result.ok("修改成功,请重新登录");
     }
 

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -21,6 +22,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +36,8 @@ public class User implements Serializable {
     @TableLogic //逻辑删除
     @TableField("is_deleted")
     private Integer isDeleted;
+
+    private String fileUrl;
 
 
     public User(String userName, String passWord, String phoneNumber) {

@@ -2,7 +2,8 @@
 SQLyog Ultimate v11.25 (64 bit)
 MySQL - 5.7.40-log : Database - bank-system
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -58,6 +59,7 @@ CREATE TABLE `user` (
   `balance` double DEFAULT '0' COMMENT '用户余额',
   `phone_number` char(80) DEFAULT '0' COMMENT '用户手机号',
   `is_deleted` tinyint(3) NOT NULL DEFAULT '0',
+  `file_url` varchar(256) COMMENT '用户头像地址',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 

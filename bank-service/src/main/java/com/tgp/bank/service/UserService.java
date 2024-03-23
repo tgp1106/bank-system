@@ -3,6 +3,7 @@ package com.tgp.bank.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import dto.FindBackDto;
+import dto.ModifyDto;
 import entity.User;
 import dto.DepositDto;
 
@@ -34,7 +35,7 @@ public interface UserService extends IService<User> {
 
     boolean userTransferByUserName(double money, String username, String transferee);
 
-    boolean modifyUserMassage(String phonenumber, String password, String username, HttpSession session);
+    boolean modifyUserMassage(ModifyDto modifyDto, HttpSession session);
 
     String getPasswordByusername(String username);
 

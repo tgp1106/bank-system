@@ -50,20 +50,15 @@ public class LoginController {
     public Result login(@RequestBody LoginVo loginVo, HttpSession session) {
 
 
-
         User user = userService.getByUserNameAndPassword(loginVo.getUsername(), loginVo.getPassword());//当用户查询不到时返回错误信息
-
-
 
         session.setAttribute("token", JwtHelper.createToken(user.getUserId(), user.getUserName()));
         //保存在session里面
-        session.setAttribute("loginUser",user);
+        session.setAttribute("loginUser", user);
 
+        redisTemplate.opsForValue().set("isLoggedIn", "true");
 
-
-        redisTemplate.opsForValue().set("isLoggedIn","true");
-
-        redisTemplate.opsForValue().set("loginUsername",user.getUserName());
+        redisTemplate.opsForValue().set("loginUsername", user.getUserName());
 
         return Result.ok();//由于@RestController注解，将msg转成json格式返回,
     }
@@ -72,18 +67,19 @@ public class LoginController {
     @ResponseBody
     public Result toadmin(@RequestBody AdminVo adminVo, HttpSession session) {
         Administrator loginAdministrator = (Administrator) session.getAttribute("loginAdministrator");
-        if (loginAdministrator != null && loginAdministrator.getAdministratorName().equals(adminVo.getAdministrator_name()) ){
-            throw new TgpException(ResultCodeEnum.FAIL.getCode(),"不要重复登录");
+        if (loginAdministrator != null && loginAdministrator.getAdministratorName().equals(adminVo.getAdministrator_name())) {
+            throw new TgpException(ResultCodeEnum.FAIL.getCode(), "不要重复登录");
         }
 
         Administrator administrator = administratorService.getByAdminNameAndPassword(adminVo.getAdministrator_name(), adminVo.getAdministrator_password());//当用户查询不到时返回错误信息
 
         session.setAttribute("token", JwtHelper.createToken(administrator.getAdministratorId(), administrator.getAdministratorName()));
         //保存在session里面
-        session.setAttribute("loginAdministrator",administrator);
+        session.setAttribute("loginAdministrator", administrator);
 
         return Result.ok();//由于@RestController注解，将msg转成json格式返回,
     }
+
     @PostMapping(value = ("toregister"))//注册接口
     @ResponseBody
     public Result register(@RequestBody User register) {
@@ -105,27 +101,26 @@ public class LoginController {
 
     @PostMapping(value = ("retrievepassword"))//接收用户名和对应手机号，返回验证码
     @ResponseBody
-    public Result retrievepassword(@RequestBody RetrievepasswordDto retrievepasswordDto,HttpSession session) {
+    public Result retrievepassword(@RequestBody RetrievepasswordDto retrievepasswordDto, HttpSession session) {
 
 
-        if (!userService.selectByUserNameAndPhoneNumber(retrievepasswordDto.getUserName(),retrievepasswordDto.getPhone())) {
+        if (!userService.selectByUserNameAndPhoneNumber(retrievepasswordDto.getUserName(), retrievepasswordDto.getPhone())) {
             throw new TgpException(ResultCodeEnum.FAIL.getCode(), "请核对用户名和手机号是否匹配");
         }
         String code = generateRandomNumber(6);
-        session.setAttribute("code",code);
-        return Result.ok("验证码为"+code);
+        session.setAttribute("code", code);
+        return Result.ok("验证码为" + code);
     }
 
     @PostMapping(value = ("findback"))//验证验证码
     @ResponseBody
     public Result findback(@RequestBody FindBackDto findBackDto, HttpSession session) {
         boolean b = userService.verifyAndUpdate(findBackDto, session);
-        if (!b){
-            throw new TgpException(ResultCodeEnum.FAIL.getCode(),"重置密码失败,请重试或练习客服");
+        if (!b) {
+            throw new TgpException(ResultCodeEnum.FAIL.getCode(), "重置密码失败,请重试或练习客服");
         }
         return Result.ok("更新成功，请尝试重新登录！");
     }
-
 
 
 }

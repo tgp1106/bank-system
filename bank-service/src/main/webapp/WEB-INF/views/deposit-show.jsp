@@ -40,7 +40,7 @@
         <form>
             <div class="form-group">
                 <label for="amount">存款金额：</label>
-                <input type="text" class="form-control" id="amount" placeholder="请输入取款金额">
+                <input type="text" class="form-control" id="amount" placeholder="请输入存款金额">
             </div>
             <button type="button" class="btn btn-primary btn-block" onclick="deposit()">提交</button>
 

@@ -16,8 +16,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModifyDto {
+
     String phone;
+
     String passWord;
 
     String userName;
+
+    /**
+     * 头像访问地址
+     */
+    String fileUrl;
 }

@@ -52,13 +52,63 @@
                 <label for="phone">用户手机号</label>
                 <input type="text" class="form-control" id="phone" placeholder="请输入新的用户手机号">
             </div>
+            <div class="form-group">
+                <div>修改头像</div>
+                <input type="file" class="form-control-file" id="file" accept="image/*">
+            </div>
             <button type="button" class="btn btn-primary btn-block" onclick="modify()">提交</button>
-
         </form>
+    </div>
+    <!-- Bootstrap 模态框 -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    只能选择一张图片，请重新选择！
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    let fileName = "";
+    // 文件上传函数
+    function uploadFile(file) {
+        var formData = new FormData();
+        formData.append('file', file);
+        return axios.post('${pageContext.request.contextPath}/uploadFile', formData)
+            .then(response => {
+                console.log(response);
+                return response.data.data;
+            })
+            .catch(error => {
+                console.error('文件上传失败:', error);
+                return null;
+            });
+    }
+    document.getElementById('file').addEventListener('change', function() {
+        var fileInput = this;
+        if (fileInput.files.length > 1) {
+            $('#myModal').modal('show'); // 显示模态框
+            fileInput.value = ''; // 清空文件输入框
+            return;
+        }
+        var file = this.files[0];
+        // 上传文件
+        uploadFile(file)
+            .then(fileUrl => {
+                if (fileUrl) {
+                    // 文件上传成功，提交表单
+                    fileName = fileUrl;
+                } else {
+                    console.error('获取文件访问地址失败');
+                }
+            });
+    });
 
     function modify() {
 
@@ -68,10 +118,10 @@
         var formData = {
             "userName":username,
             "phone":phone,
-            "passWord": password
-
+            "passWord": password,
+            "fileUrl": fileName,
         }
-
+        console.log("表单提交" + fileName);
         axios.post('${pageContext.request.contextPath}/modify', formData)
             .then(response => {
                 console.log(response)

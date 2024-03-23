@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%
     User user = (User)pageContext.getSession().getAttribute("loginUser");
+    String url = user.getFileUrl();
     %>
     <title>用户主页</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -116,7 +117,8 @@
 <nav class="navbar" style="height: 10%;background-color: transparent">
     <h3 class="text-white" style="text-align: center;">银 行 管 理 系 统</h3>
     <div class="profile-info">
-        <img src="../../static/img/头像.jpg" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+        <img src="${pageContext.request.contextPath}/imageProxy?imageName=<%=url%>" alt="" style="width: 40px; height: 40px; border-radius: 50%;">
+        <button class="btn btn-primary btn-outline-light ml-2" style="margin-left: 15px;width: 100px;" onclick="backIndex()">返回主页</button>
         <button class="btn btn-danger btn-outline-light ml-2" style="margin-left: 15px;width: 100px;">退出登录</button>
     </div>
 </nav>
@@ -271,6 +273,10 @@
         $.get(url, function (data) {
             $('#pageContent').html(data);
         });
+    }
+
+    function backIndex() {
+        window.location.href = "${pageContext.request.contextPath}/index";
     }
 
 </script>
