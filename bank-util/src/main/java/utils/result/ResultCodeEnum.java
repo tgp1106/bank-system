@@ -24,7 +24,9 @@ public enum ResultCodeEnum {
 
     USERS_NOT_EXISTS(30001,"用户不存在"),
     UPLOAD_ERROR(20001, "文件上传失败"),
-    LOAD_ERROR(20002, "文件加载失败");
+    LOAD_ERROR(20002, "文件加载失败"),
+
+    SAVE_OPERATOR_ERROR(30002, "保存日志失败");
 
     private Integer code;
 

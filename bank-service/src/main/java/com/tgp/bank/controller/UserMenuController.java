@@ -117,9 +117,9 @@ public class UserMenuController {
 
         boolean b = userService.userTransferByUserName(transferDto.getMoney(), transferDto.getUserName(), transferDto.getTransferee());
         if (!b) {
-            throw new TgpException(201, "取款失败");
+            throw new TgpException(201, "转账失败");
         }
-        return Result.ok("取款成功");
+        return Result.ok("转账成功");
     }
 
     @ResponseBody

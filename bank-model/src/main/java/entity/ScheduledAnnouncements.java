@@ -1,6 +1,7 @@
 package entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,6 +19,7 @@ public class ScheduledAnnouncements {
     private int id;
     private String content;
     private String author;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishedAt;
 
 }

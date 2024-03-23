@@ -6,20 +6,25 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tgp.bank.mapper.UserMapper;
+import com.tgp.bank.service.UserOperationService;
 import com.tgp.bank.service.UserService;
 import dto.FindBackDto;
 import dto.ModifyDto;
-import entity.Transaction;
 import entity.User;
 import dto.DepositDto;
+import entity.UserOperation;
+import enums.OperatorEnum;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utils.MD5;
 import utils.execption.TgpException;
 import utils.result.ResultCodeEnum;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -34,6 +39,9 @@ import java.util.Random;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Resource
+    private UserOperationService userOperationService;
 
     @Override
     public User getByUserName(String name) {
@@ -87,7 +95,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         Double balance = user.getBalance();
         user.setBalance(balance + money);
-        return this.saveOrUpdate(user);//主键不为空时，它会执行updata操作,更新用户余额
+        boolean update = this.saveOrUpdate(user);
+        // 记录日志
+        UserOperation userOperation = new UserOperation()
+                .setOperation(OperatorEnum.DEPOSIT.getOperator())
+                .setOperationAmount(depositDto.getMoney())
+                .setOperationTime(new Date())
+                .setOperationUsername(username);
+        userOperationService.saveOperator(userOperation);
+        return update;//主键不为空时，它会执行updata操作,更新用户余额
     }
 
     public double getUserBalance(String username) {//获取用户余额
@@ -136,6 +152,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return false;
         }
         boolean b = this.saveOrUpdate(user);//主键不为空时，它会执行updata操作,更新用户余额
+        // 记录日志
+        UserOperation userOperation = new UserOperation()
+                .setOperation(OperatorEnum.WITHDRAW.getOperator())
+                .setOperationAmount(money)
+                .setOperationTime(new Date())
+                .setOperationUsername(username);
+        userOperationService.saveOperator(userOperation);
         return b;
     }
 
@@ -159,8 +182,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         theTransferee.setBalance(transfereeBalance + money);
         this.saveOrUpdate(user);
         boolean b = this.saveOrUpdate(theTransferee);
+        // 记录日志
+        UserOperation userOperation = new UserOperation()
+                .setOperation(OperatorEnum.TRANSFER.getOperator())
+                .setOperationAmount(money)
+                .setOperationTime(new Date())
+                .setOperationUsername(username)
+                .setTransferName(theTransferee.getUserName());
+        userOperationService.saveOperator(userOperation);
         return b;
-
     }
 
     @Override

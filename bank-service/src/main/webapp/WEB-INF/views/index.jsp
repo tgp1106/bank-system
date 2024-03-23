@@ -165,9 +165,10 @@
                     <thead style="text-align: center">
                     <tr>
                         <th>时间</th>
+                        <th>操作人</th>
                         <th>操作类型</th>
                         <th>交易金额(元)</th>
-                        <th>转人</th>
+                        <th>转入者</th>
                     </tr>
                     </thead>
                     <tbody  id="transactionTableBody">
@@ -193,20 +194,20 @@
     });
 
     function getOperatorList() {
-        var username = <%= user.getUserName() %>;
+        console.log("qqqq");
         $.ajax({
-            url: '${pageContext.request.contextPath}/user/getOperatorList',
+            url: '${pageContext.request.contextPath}/getOperatorList?username=<%=user.getUserName()%>',
             type: 'GET',
-            params:{username:username},
-            dataType: 'json',
-            success: function (data) {
+            success: function (result) {
                 var ul = $('#transactionTableBody');
-                $.each(data, function (index, item) {
+                console.log(result)
+                $.each(result.data, function (index, item) {
                     ul.append('<tr>' +
-                        '<td>' + item.time + '</td>' +
-                        '<td>'  + item.type.name + '</td>' +
-                        '<td>' + item.money + '</td>' +
-                        '<td>' + item.transferName + '</td>' +
+                        '<td>' + item.operationTime + '</td>' +
+                        '<td>' + item.operationUsername + '</td>' +
+                        '<td>'  + item.operation + '</td>' +
+                        '<td>' + item.operationAmount + '</td>' +
+                        '<td>' + item.transferName  + '</td>' +
                         '</tr>');
                 });
             },

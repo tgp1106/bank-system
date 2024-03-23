@@ -80,14 +80,16 @@ insert  into `user`(`user_id`,`user_name`,`pass_word`,`balance`,`phone_number`,`
 
 /*Table structure for table `user_transaction` */
 
-DROP TABLE IF EXISTS `user_transaction`;
-
-CREATE TABLE `user_transaction` (
-  `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_operation` varchar(255) DEFAULT NULL,
-  `operation_time` datetime DEFAULT NULL,
-  `operation_amount` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`transaction_id`)
+DROP TABLE IF EXISTS `user_operation`;
+CREATE TABLE `user_operation`
+(
+    `id`                 int(11) NOT NULL AUTO_INCREMENT,
+    `operation_username` char(80)     NOT NULL,
+    `operation`          varchar(255) NOT NULL,
+    `operation_time`     datetime DEFAULT NOW(),
+    `operation_amount`   double   DEFAULT NULL,
+    `transfer_name`      char(80)   DEFAULT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `user_transaction` */
