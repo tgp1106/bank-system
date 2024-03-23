@@ -198,7 +198,7 @@
             params:{username:username},
             dataType: 'json',
             success: function (data) {
-                var ul = $('#noticeList');
+                var ul = $('#transactionTableBody');
                 $.each(data, function (index, item) {
                     ul.append('<tr>' +
                         '<td>' + item.time + '</td>' +
@@ -216,15 +216,16 @@
 
     function getNoticeList() {
         $.ajax({
-            url: '${pageContext.request.contextPath}/admin/getNoticeList',
+            url: '${pageContext.request.contextPath}/announcements/getNoticeList',
             type: 'GET',
             dataType: 'json',
-            success: function (data) {
-                var ul = $('#transactionTableBody');
-                $.each(data, function (index, item) {
+            success: function (resp) {
+                var ul = $('#noticeList');
+                $.each(resp.data, function (index, item) {
+
                     ul.append('<li class="notice-li">' +
                         '<div class="notice-time">' + item.time + '</div>' +
-                        '<span class="admin-name">' + item.name + ':</span>' +
+                        '<span class="admin-name">' + item.name + ' : </span>' +
                         item.content + '</li>');
                 });
             },
