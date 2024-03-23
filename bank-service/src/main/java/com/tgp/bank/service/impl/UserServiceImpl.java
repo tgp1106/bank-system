@@ -13,6 +13,7 @@ import entity.Transaction;
 import entity.User;
 import dto.DepositDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import utils.MD5;
 import utils.execption.TgpException;
 import utils.result.ResultCodeEnum;
@@ -139,6 +140,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public boolean userTransferByUserName(double money, String username, String transferee) {
         if (money< 0) {
             throw new TgpException(201, "转账金额不能为负");
@@ -149,13 +151,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user.getBalance() < 0) {
             throw new TgpException(ResultCodeEnum.FAIL.getCode(),"转账金额不能超过用户余额！");
         }
-        this.saveOrUpdate(user);
         User theTransferee = this.getByUserName(transferee);
         if (theTransferee == null){
             throw new TgpException(ResultCodeEnum.FAIL.getCode(),"转账用户不存在，请核对后输入！");
         }
         Double transfereeBalance = theTransferee.getBalance();
         theTransferee.setBalance(transfereeBalance + money);
+        this.saveOrUpdate(user);
         boolean b = this.saveOrUpdate(theTransferee);
         return b;
 

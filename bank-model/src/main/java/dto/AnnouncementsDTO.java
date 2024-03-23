@@ -1,4 +1,4 @@
-package entity;
+package dto;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,13 +13,8 @@ import java.util.Date;
  * @Description 管理員公告
  */
 @Data
-@TableName("announcements")
 @Accessors(chain = true)
-public class Announcements {
-
-    private int id;
-
-    private String title = "";
+public class AnnouncementsDTO {
 
     private String content;
 
@@ -28,7 +23,8 @@ public class Announcements {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishedAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updatedAt;
-
+    /**
+     * 0-立即发送 1-定时发送
+     */
+    private int sendOption;
 }

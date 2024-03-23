@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="entity.User" %>
 <%@ page import="javax.servlet.http.HttpServletRequest" %>
+<%@ page import="entity.Administrator" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -125,6 +126,9 @@
             width: 25%;
         }
     </style>
+    <%
+        Administrator user = (Administrator)pageContext.getSession().getAttribute("loginAdministrator");
+    %>
 </head>
 
 <body>
@@ -217,14 +221,14 @@
                     <div class="form-check d-inline-block" style="padding-right: 50px">
                     </div>
                     <div class="form-check d-inline-block mr-3">
-                        <input class="form-check-input" type="radio" name="sendOption" id="sendNow" value="now" checked>
+                        <input class="form-check-input" type="radio" name="sendOption" id="sendNow" value="0" checked>
                         <label class="form-check-label" for="sendNow">
                             立即发布
                         </label>
                     </div>
 
                     <div class="form-check d-inline-block">
-                        <input class="form-check-input" type="radio" name="sendOption" id="sendLater" value="later">
+                        <input class="form-check-input" type="radio" name="sendOption" id="sendLater" value="1">
                         <label class="form-check-label" for="sendLater">
                             定时发布
                         </label>
@@ -241,80 +245,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    function freezeUser(userName) {
-        axios.get('/userFreeze', {
-            params: {
-                userName: userName
-            }
-        })
-            .then(response => {
-                console.log(response)
-                if (response.data.code === 201) {
-                    alert(response.data.message)
-                } else {
-                    alert(response.data.data)
-                }
-            })
-    }
-    function modify(username) {
-        var phone = document.getElementById("phone-" + username).value;
-        var password = document.getElementById("password-" + username).value;
-
-        var formData = {
-            "userName": username,
-            "phone": phone,
-            "passWord": password
-        };
-
-        axios.post('${pageContext.request.contextPath}/modify', formData)
-            .then(response => {
-                console.log(response)
-                if (response.data.code === 201) {
-                    alert(response.data.message)
-                } else {
-                    alert(response.data.data);
-                    $('#modifyUserModal-' + username).modal('hide'); // 关闭当前用户的弹窗
-                }
-            })
-            .catch(error => {
-                this.message = error.response.data.message;
-                // 处理失败的情况
-            });
-
-    }
-    function unfreezeUser(userName) {
-        axios.get('/userUnfreeze', {
-            params: {
-                userName: userName
-            }
-        })
-            .then(response => {
-                console.log(response);
-                if (response.data.code === 201) {
-                    alert(response.data.message);
-                } else {
-                    alert(response.data.data);
-                }
-            })
-    }
-    function updateUser(userName) {
-        axios.get('/updateUser', {
-            params: {
-                userName: userName
-            }
-        }).then(response => {
-            console.log(response);
-            if (response.data.code === 201) {
-                alert(response.data.message);
-            } else {
-                alert(response.data.message);
-            }
-        })
-    }
-
-</script>
 
 <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
@@ -415,7 +345,7 @@
         });
     }
     $('input[type=radio][name=sendOption]').change(function() {
-        if (this.value === 'later') {
+        if (this.value === '1') {
             $('#timeInput').show();
         } else {
             $('#timeInput').hide();
@@ -427,26 +357,25 @@
         var sendOption = $('input[name="sendOption"]:checked').val();
         var publishTime = '';
 
-        if (sendOption === 'later') {
+        if (sendOption === '0') {
             publishTime = $('#publishTime').val();
         }
-
-        $.ajax({
-            type: 'POST',
-            url: '${pageContext.request.contextPath}/admin/publishAnnouncement', // 修改为实际处理请求的URL
-            data: {
-                content: content,
-                sendOption: sendOption,
-                publishTime: publishTime
-            },
-            success: function(response) {
-                $('#successMessage').fadeIn(300).delay(2000).fadeOut(400); // 显示提示信息并设置延迟隐藏
-                resetForm();
-            },
-            error: function(xhr, status, error) {
-                alert('发布失败，请重试');
-            }
-        });
+        var data = {
+                "content": content,
+                "author": '<%=user.getAdministratorName()%>',
+                "sendOption": sendOption === '0' ? 0 : 1,
+                "publishedAt": publishTime
+        };
+        axios.post('${pageContext.request.contextPath}/publishAnnouncement', data)
+            .then(response => {
+                if (response.data.code === 200) {
+                    alert(response.data.message)
+                    resetForm();
+                }
+            })
+            .catch(error => {
+                this.message = error.response.data.message;
+            });
     }
     function resetForm() {
         $('#content').val('');

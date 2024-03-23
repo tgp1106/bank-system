@@ -38,12 +38,23 @@ DROP TABLE IF EXISTS `announcements`;
 
 CREATE TABLE `announcements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
+  `title` varchar(255),
   `content` text NOT NULL,
   `author` varchar(100) DEFAULT NULL,
   `published_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 定时发布
+DROP TABLE IF EXISTS `schedule_announcements`;
+CREATE TABLE `schedule_announcements`
+(
+    `id`           int(11) NOT NULL AUTO_INCREMENT,
+    `content`      text NOT NULL,
+    `author`       varchar(100) DEFAULT NULL,
+    `published_at` datetime     DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `announcements` */

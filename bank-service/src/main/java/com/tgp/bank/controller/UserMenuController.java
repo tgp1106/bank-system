@@ -37,16 +37,24 @@ public class UserMenuController {
     }
 
     @GetMapping("/withdraw")
-    public String withdraw() {return "/withdraw-show";}
+    public String withdraw() {
+        return "/withdraw-show";
+    }
 
     @GetMapping("/deposit")
-    public String deposit() {return "/deposit-show";}
+    public String deposit() {
+        return "/deposit-show";
+    }
 
     @GetMapping("/transfer")
-    public String transfer(){return "/transfer-show";}
+    public String transfer() {
+        return "/transfer-show";
+    }
 
     @GetMapping("/modify")
-    public String modify(){return "/modify-show";}
+    public String modify() {
+        return "/modify-show";
+    }
 
     @GetMapping("/admin")
     public String admin(Model model) {
@@ -58,9 +66,8 @@ public class UserMenuController {
     @GetMapping("/userFreeze")
     @ResponseBody
     public Result userFreeze(@RequestParam("userName") String userName) {
-        if (!userService.freezeUser(userName))
-        {
-            throw new TgpException(201,"冻结失败");
+        if (!userService.freezeUser(userName)) {
+            throw new TgpException(201, "冻结失败");
         }
         return Result.ok("冻结成功");
     }
@@ -68,9 +75,8 @@ public class UserMenuController {
     @GetMapping("/userUnfreeze")
     @ResponseBody
     public Result userUnfreeze(@RequestParam("userName") String userName) {
-        if (!userService.fruserUnfreeze(userName))
-        {
-            throw new TgpException(201,"解冻结失败");
+        if (!userService.fruserUnfreeze(userName)) {
+            throw new TgpException(201, "解冻结失败");
         }
         return Result.ok("解冻成功");
     }
@@ -94,16 +100,15 @@ public class UserMenuController {
     @ResponseBody
     @PostMapping("/withdraw")
     public Result withdraw(@RequestBody WithDrawDto withDrawDto) {
-        if (withDrawDto.getMoney()< 0) {
+        if (withDrawDto.getMoney() < 0) {
             throw new TgpException(201, "取款不能为负");
         }
-        boolean b = userService.withdraw(withDrawDto.getMoney(),withDrawDto.getUsername());
+        boolean b = userService.withdraw(withDrawDto.getMoney(), withDrawDto.getUsername());
         if (!b) {
             throw new TgpException(201, "取款失败");
         }
         return Result.ok("取款成功");
     }
-
 
 
     @ResponseBody
@@ -120,7 +125,7 @@ public class UserMenuController {
     @ResponseBody
     @PostMapping("/modify")
     public Result modify(@RequestBody ModifyDto modifyDto, HttpSession session) {
-        boolean b = userService.modifyUserMassage(modifyDto,session);
+        boolean b = userService.modifyUserMassage(modifyDto, session);
         if (!b) {
             throw new TgpException(201, "修改失败");
         }
@@ -142,8 +147,8 @@ public class UserMenuController {
 
     @ResponseBody
     @GetMapping("/updateBalance")
-    public double updateBalance( HttpSession session) {
-        User loginUser= (User) session.getAttribute("loginUser");
+    public double updateBalance(HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
         String userName = loginUser.getUserName();
         User user = userService.getByUserName(userName);
         return user.getBalance();
